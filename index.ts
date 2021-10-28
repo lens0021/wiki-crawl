@@ -126,7 +126,14 @@ async function importXml(
       });
     }
 
-    return bot.request({}, uploadRequestOptions);
+    return bot
+      .request({}, uploadRequestOptions)
+      .then((response: any) => {
+        console.log(response);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   }
 }
 
@@ -143,20 +150,20 @@ const main = async () => {
 
   var startCurid = readLastCurid();
   var endCurId = 1;
-  startCurid = 4;
-  endCurId = 4;
+  startCurid = 1;
+  endCurId = 100;
   for (let curid = startCurid; curid <= endCurId; curid++) {
     console.log(`Trying to import ${curid}...`);
     await exportXml(sourceBot, curid);
     let summary = '';
     try {
       summary = await makeSummary(sourceWiki, sourceBot, curid);
+      importXml(targetBot, sourceWiki, summary);
+      await delay(1000);
     } catch (e) {
       console.log(`Skipping ${curid}`);
       continue;
     }
-    importXml(targetBot, sourceWiki, summary);
-    await delay(1000);
   }
 };
 

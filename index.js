@@ -192,7 +192,14 @@ function importXml(bot, src, summary) {
                         value: param
                     });
                 }
-                return [2 /*return*/, bot.request({}, uploadRequestOptions)];
+                return [2 /*return*/, bot
+                        .request({}, uploadRequestOptions)
+                        .then(function (response) {
+                        console.log(response);
+                    })
+                        .catch(function (err) {
+                        console.log(err);
+                    })];
             }
             return [2 /*return*/];
         });
@@ -219,12 +226,12 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 targetBot = _a.sent();
                 startCurid = readLastCurid();
                 endCurId = 1;
-                startCurid = 4;
-                endCurId = 4;
+                startCurid = 1;
+                endCurId = 100;
                 curid = startCurid;
                 _a.label = 5;
             case 5:
-                if (!(curid <= endCurId)) return [3 /*break*/, 13];
+                if (!(curid <= endCurId)) return [3 /*break*/, 12];
                 console.log("Trying to import " + curid + "...");
                 return [4 /*yield*/, exportXml(sourceBot, curid)];
             case 6:
@@ -232,25 +239,23 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 summary = '';
                 _a.label = 7;
             case 7:
-                _a.trys.push([7, 9, , 10]);
+                _a.trys.push([7, 10, , 11]);
                 return [4 /*yield*/, makeSummary(sourceWiki, sourceBot, curid)];
             case 8:
                 summary = _a.sent();
-                return [3 /*break*/, 10];
-            case 9:
-                e_1 = _a.sent();
-                console.log("Skipping " + curid);
-                return [3 /*break*/, 12];
-            case 10:
                 importXml(targetBot, sourceWiki, summary);
                 return [4 /*yield*/, delay(1000)];
-            case 11:
+            case 9:
                 _a.sent();
-                _a.label = 12;
-            case 12:
+                return [3 /*break*/, 11];
+            case 10:
+                e_1 = _a.sent();
+                console.log("Skipping " + curid);
+                return [3 /*break*/, 11];
+            case 11:
                 curid++;
                 return [3 /*break*/, 5];
-            case 13: return [2 /*return*/];
+            case 12: return [2 /*return*/];
         }
     });
 }); };
