@@ -1,0 +1,17 @@
+{
+  "mwdd": {
+    "apiUrl": "http://default.mediawiki.mwdd.localhost:8080/w/api.php",
+    "username": "Admin",
+    "password": "mwddpassword"
+  },
+  "femiwiki": {
+    "apiUrl": "https://femiwiki.com/w/api.php",
+    "username": "MyBot",
+    "password": "0000"
+  },
+  "librewiki": {
+    "apiUrl": "https://librewiki.net/api.php",
+    "username": "MyBot",
+    "password": "0000"
+  }
+}
