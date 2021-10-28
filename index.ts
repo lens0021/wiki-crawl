@@ -80,13 +80,6 @@ async function makeSummary(
   return `${wiki.readableName} ${pageLink} 문서 ${revLink}에서 가져옴 ([[페미위키:포크 프로젝트]])`;
 }
 
-function stringToReadable(str: string): typeof Readable {
-  const readable = new Readable();
-  readable.push(str);
-  readable.push(null);
-  return readable;
-}
-
 async function importXml(
   bot: typeof MWBot,
   src: WikiInfo,

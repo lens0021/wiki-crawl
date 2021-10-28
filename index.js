@@ -156,12 +156,6 @@ function makeSummary(wiki, bot, curid) {
         });
     });
 }
-function stringToReadable(str) {
-    var readable = new Readable();
-    readable.push(str);
-    readable.push(null);
-    return readable;
-}
 function importXml(bot, src, summary) {
     return __awaiter(this, void 0, void 0, function () {
         var USE_BUILT_IN, file, params, uploadRequestOptions, paramName, param;
