@@ -55,6 +55,7 @@ async function exportXml(bot: typeof MWBot, curid: number): Promise<void> {
   });
   const xml = result?.query?.export?.['*'];
   await fsPromises.writeFile(TEMP_FILENAME, xml);
+  console.log('  Done');
 }
 
 async function makeSummary(
@@ -67,6 +68,13 @@ async function makeSummary(
     prop: 'revisions',
     pageids: curid
   });
+  if (!result?.query?.pages[curid].revisions) {
+    throw new Error(`Page is not found`);
+  }
+  const ns = result?.query?.pages[curid].ns;
+  if (ns !== 0) {
+    throw new Error(`The namespace for ${curid} is ${ns}`);
+  }
   const revid: string = result?.query?.pages[curid].revisions[0].revid;
   const title: string = result?.query?.pages[curid].title;
   const timestamp: string = result?.query?.pages[curid].revisions[0].timestamp;
@@ -151,17 +159,17 @@ const main = async () => {
   var startCurid = readLastCurid();
   var endCurId = 1;
   startCurid = 1;
-  endCurId = 100;
+  endCurId = 5;
   for (let curid = startCurid; curid <= endCurId; curid++) {
     console.log(`Trying to import ${curid}...`);
     await exportXml(sourceBot, curid);
     let summary = '';
     try {
       summary = await makeSummary(sourceWiki, sourceBot, curid);
-      importXml(targetBot, sourceWiki, summary);
+      // importXml(targetBot, sourceWiki, summary);
       await delay(1000);
-    } catch (e) {
-      console.log(`Skipping ${curid}`);
+    } catch (e: any) {
+      console.log(`  Skipping ${curid}, error: ${e.toString()}`);
       continue;
     }
   }

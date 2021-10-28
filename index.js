@@ -125,27 +125,35 @@ function exportXml(bot, curid) {
                     return [4 /*yield*/, fs_1.promises.writeFile(TEMP_FILENAME, xml)];
                 case 2:
                     _c.sent();
+                    console.log('  Done');
                     return [2 /*return*/];
             }
         });
     });
 }
 function makeSummary(wiki, bot, curid) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function () {
-        var result, revid, title, timestamp, pageLink, revLink;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var result, ns, revid, title, timestamp, pageLink, revLink;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0: return [4 /*yield*/, bot.request({
                         action: 'query',
                         prop: 'revisions',
                         pageids: curid
                     })];
                 case 1:
-                    result = _d.sent();
-                    revid = (_a = result === null || result === void 0 ? void 0 : result.query) === null || _a === void 0 ? void 0 : _a.pages[curid].revisions[0].revid;
-                    title = (_b = result === null || result === void 0 ? void 0 : result.query) === null || _b === void 0 ? void 0 : _b.pages[curid].title;
-                    timestamp = (_c = result === null || result === void 0 ? void 0 : result.query) === null || _c === void 0 ? void 0 : _c.pages[curid].revisions[0].timestamp;
+                    result = _f.sent();
+                    if (!((_a = result === null || result === void 0 ? void 0 : result.query) === null || _a === void 0 ? void 0 : _a.pages[curid].revisions)) {
+                        throw new Error("Page is not found");
+                    }
+                    ns = (_b = result === null || result === void 0 ? void 0 : result.query) === null || _b === void 0 ? void 0 : _b.pages[curid].ns;
+                    if (ns !== 0) {
+                        throw new Error("The namespace for " + curid + " is " + ns);
+                    }
+                    revid = (_c = result === null || result === void 0 ? void 0 : result.query) === null || _c === void 0 ? void 0 : _c.pages[curid].revisions[0].revid;
+                    title = (_d = result === null || result === void 0 ? void 0 : result.query) === null || _d === void 0 ? void 0 : _d.pages[curid].title;
+                    timestamp = (_e = result === null || result === void 0 ? void 0 : result.query) === null || _e === void 0 ? void 0 : _e.pages[curid].revisions[0].timestamp;
                     pageLink = "[[" + wiki.prefix + ":Special:Redirect/page/" + curid + "|" + title + "]]";
                     if (title.includes(' ')) {
                         pageLink = "\"" + pageLink + "\"";
@@ -227,7 +235,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 startCurid = readLastCurid();
                 endCurId = 1;
                 startCurid = 1;
-                endCurId = 100;
+                endCurId = 5;
                 curid = startCurid;
                 _a.label = 5;
             case 5:
@@ -243,14 +251,15 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 return [4 /*yield*/, makeSummary(sourceWiki, sourceBot, curid)];
             case 8:
                 summary = _a.sent();
-                importXml(targetBot, sourceWiki, summary);
+                // importXml(targetBot, sourceWiki, summary);
                 return [4 /*yield*/, delay(1000)];
             case 9:
+                // importXml(targetBot, sourceWiki, summary);
                 _a.sent();
                 return [3 /*break*/, 11];
             case 10:
                 e_1 = _a.sent();
-                console.log("Skipping " + curid);
+                console.log("  Skipping " + curid + ", error: " + e_1.toString());
                 return [3 /*break*/, 11];
             case 11:
                 curid++;
