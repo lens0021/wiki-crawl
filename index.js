@@ -83,9 +83,6 @@ function loginWiki(wiki) {
         });
     });
 }
-function readLastCurid() {
-    return 1;
-}
 function readWikiInfo(prefix) {
     return __awaiter(this, void 0, void 0, function () {
         var data, _a, _b, wikiInfo;
@@ -220,22 +217,20 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var sourceWiki, sourceBot, targetWiki, targetBot, startCurid, endCurId, curid, summary, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, readWikiInfo('librewiki')];
+            case 0: return [4 /*yield*/, readWikiInfo('kowiki')];
             case 1:
                 sourceWiki = _a.sent();
                 return [4 /*yield*/, loginWiki(sourceWiki)];
             case 2:
                 sourceBot = _a.sent();
-                return [4 /*yield*/, readWikiInfo('mwdd')];
+                return [4 /*yield*/, readWikiInfo('femiwiki')];
             case 3:
                 targetWiki = _a.sent();
                 return [4 /*yield*/, loginWiki(targetWiki)];
             case 4:
                 targetBot = _a.sent();
-                startCurid = readLastCurid();
-                endCurId = 1;
                 startCurid = 1;
-                endCurId = 5;
+                endCurId = 100;
                 curid = startCurid;
                 _a.label = 5;
             case 5:
@@ -251,10 +246,9 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 return [4 /*yield*/, makeSummary(sourceWiki, sourceBot, curid)];
             case 8:
                 summary = _a.sent();
-                // importXml(targetBot, sourceWiki, summary);
+                importXml(targetBot, sourceWiki, summary);
                 return [4 /*yield*/, delay(1000)];
             case 9:
-                // importXml(targetBot, sourceWiki, summary);
                 _a.sent();
                 return [3 /*break*/, 11];
             case 10:

@@ -29,10 +29,6 @@ async function loginWiki(wiki: WikiInfo): Promise<typeof MWBot> {
   return bot;
 }
 
-function readLastCurid(): number {
-  return 1;
-}
-
 async function readWikiInfo(prefix: string): Promise<WikiInfo> {
   const data = JSON.parse(await fsPromises.readFile('./auth.json', 'utf8'))[
     prefix
@@ -150,23 +146,21 @@ function delay(ms: number) {
 }
 
 const main = async () => {
-  const sourceWiki = await readWikiInfo('librewiki');
+  const sourceWiki = await readWikiInfo('kowiki');
   const sourceBot = await loginWiki(sourceWiki);
 
-  const targetWiki = await readWikiInfo('mwdd');
+  const targetWiki = await readWikiInfo('femiwiki');
   const targetBot = await loginWiki(targetWiki);
 
-  var startCurid = readLastCurid();
-  var endCurId = 1;
-  startCurid = 1;
-  endCurId = 5;
+  const startCurid = 1;
+  const endCurId = 100;
   for (let curid = startCurid; curid <= endCurId; curid++) {
     console.log(`Trying to import ${curid}...`);
     await exportXml(sourceBot, curid);
     let summary = '';
     try {
       summary = await makeSummary(sourceWiki, sourceBot, curid);
-      // importXml(targetBot, sourceWiki, summary);
+      importXml(targetBot, sourceWiki, summary);
       await delay(1000);
     } catch (e: any) {
       console.log(`  Skipping ${curid}, error: ${e.toString()}`);
